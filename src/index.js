@@ -4,30 +4,31 @@ const SpotifyWebApi = require('spotify-web-api-node');
 const open = require('open');
 const http = require('http');
 const url = require('url');
-const artists = require('./artists.json');
+const artists = require('../artists.json');
+const logger = require('./services/logger');
 
 if (!process.env.SETLISTFM_API_KEY) {
-  console.error('Setlist.fm API key is missing in the environment variables');
+  logger.error('Setlist.fm API key is missing in the environment variables');
   process.exit();
 }
 
 if (!process.env.SPOTIFY_CLIENT_ID) {
-  console.error('Spotify Client Id is missing in the environment variables');
+  logger.error('Spotify Client Id is missing in the environment variables');
   process.exit();
 }
 
 if (!process.env.SPOTIFY_CLIENT_SECRET) {
-  console.error('Spotify Client Secret is missing in the environment variables');
+  logger.error('Spotify Client Secret is missing in the environment variables');
   process.exit();
 }
 
 if (!process.env.SPOTIFY_CALLBACK_URI) {
-  console.error('Spotify Callback Uri is missing in the environment variables');
+  logger.error('Spotify Callback Uri is missing in the environment variables');
   process.exit();
 }
 
 if (!process.env.SPOTIFY_USER_ID) {
-  console.error('Spotify User Id is missing in the environment variables');
+  logger.error('Spotify User Id is missing in the environment variables');
   process.exit();
 }
 
@@ -39,7 +40,7 @@ try {
     redirectUri: process.env.SPOTIFY_CALLBACK_URI,
   });
 } catch (e) {
-  console.error('An error occurred while connecting to the Spotify API: ', e);
+  logger.error('An error occurred while connecting to the Spotify API: ', e);
   process.exit();
 }
 
@@ -52,7 +53,7 @@ try {
     language: 'en',
   });
 } catch (e) {
-  console.error('An error occurred while connecting to the Setlist.fm API: ', e);
+  logger.error(`An error occurred while connecting to the Setlist.fm API: ${e.message}`);
   process.exit();
 }
 
@@ -65,7 +66,7 @@ const generatePlaylists = async (code) => {
     spotifyApi.setRefreshToken(token.body.refresh_token);
 
     for (const artist of artists) {
-      console.log(`Starting process for ${artist.name}`);
+      logger.info(`Starting process for ${artist.name}`);
       const setlists = await setlistfmClient.getArtistSetlists(artist.mbid, { p: 1 });
       const lastEventDate = setlists.setlist[0].eventDate;
       const sets = setlists.setlist[0].sets.set;
@@ -82,7 +83,7 @@ const generatePlaylists = async (code) => {
         const playlistsToRemove = existingPlaylists.filter((p) => p.name.startsWith(`${artist.name} live `));
         if (playlistsToRemove.length > 0) {
           for (const playlist of playlistsToRemove) {
-            console.log(`Removing the '${playlist.name}' playlist...`);
+            logger.info(`- Removing the '${playlist.name}' playlist...`);
             await spotifyApi.unfollowPlaylist(playlist.id);
           }
         }
@@ -105,7 +106,7 @@ const generatePlaylists = async (code) => {
 
         if (songsUri.length > 0) {
           const playlistName = `${artist.name} live ${lastEventDate}`;
-          console.log(`Creating '${playlistName}' playlist...`);
+          logger.info(`- Creating '${playlistName}' playlist...`);
           const createdPlaylist = await spotifyApi.createPlaylist(
             process.env.SPOTIFY_USER_ID, playlistName,
             { public: false },
@@ -113,13 +114,13 @@ const generatePlaylists = async (code) => {
           await spotifyApi.addTracksToPlaylist(createdPlaylist.body.id, songsUri);
         }
       } else {
-        console.log(`There is no new playlist to create for ${artist.name} ;-)`);
+        logger.info(`- There is no new playlist to create for ${artist.name}`);
       }
       await sleep(1000);
     }
-    console.log('The playlist generation process was completed without any errors');
+    logger.info('The playlist generation process was completed without any errors');
   } catch (e) {
-    console.error('An error occurred while generating the playlists: ', e);
+    logger.error('An error occurred while generating the playlists: ', e);
   }
 };
 
@@ -127,7 +128,7 @@ http.createServer(async (request, response) => {
   const urlParse = url.parse(request.url, true);
   if (urlParse.pathname && urlParse.pathname === '/callback') {
     response.writeHead(200, { 'Content-Type': 'text/html' });
-    response.end('The local server has retrieved the authentication code and continues executing the script... You can close this tab ;-) !');
+    response.end('The local server has retrieved the authentication code and continues executing the script... You can close this tab! ;-)');
     await generatePlaylists(urlParse.query.code);
     process.exit();
   } else {

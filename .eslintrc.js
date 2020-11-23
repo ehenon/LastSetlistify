@@ -11,8 +11,8 @@ module.exports = {
     ecmaVersion: 11,
   },
   rules: {
-    'no-console': 'off',
     'no-restricted-syntax': 'off', // TODO: respect this rule
     'no-await-in-loop': 'off', // TODO: respect this rule
+    'object-curly-newline': 'off',
   },
 };
