@@ -1,0 +1,22 @@
+{
+  "name": "lastsetlistify",
+  "version": "1.0.0",
+  "description": "Small Node.js program that automatically creates Spotify playlists from the latest setlists of your favourite live bands!",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "lint": "eslint"
+  },
+  "author": "ehenon",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "open": "^7.3.0",
+    "setlistfm-js": "^1.2.0",
+    "spotify-web-api-node": "^4.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.10.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1"
+  }
+}
