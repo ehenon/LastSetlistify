@@ -8,7 +8,7 @@ The idea behind this program is to keep your Spotify playlists varied, changing,
 
 ## Prerequisites 📋
 
-The only prerequisite to use this program is to have Node.js on your machine. If you don't have it yet, you can download and install it through the [official website](https://nodejs.org/). At the time this README is written, the latest LTS version of Node.js is 14.15.1. LastSetlistify has been tested and works with this version.
+The only prerequisite to use this program is to have Node.js on your machine. If you don't have it yet, you can download and install it through the [official website](https://nodejs.org/). LastSetlistify has been tested and works with Node.js 12.16.1 LTS version.
 
 ## Installation 🔧
 
