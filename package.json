@@ -5,9 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "lint": "eslint"
+    "lint": "eslint ."
   },
-  "author": "ehenon",
+  "author": "Emilien Henon <emilienhenon@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/ehenon/LastSetlistify/issues"
+  },
+  "homepage": "https://github.com/ehenon/LastSetlistify#readme",
   "dependencies": {
     "dotenv": "^8.2.0",
     "open": "^7.3.0",
@@ -15,8 +19,11 @@
     "spotify-web-api-node": "^4.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
     "eslint": "^7.10.0",
     "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-plugin-import": "^2.22.1"
+    "eslint-plugin-import": "^2.22.1",
+    "husky": "^4.3.0"
   }
 }
