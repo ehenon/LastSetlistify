@@ -13,6 +13,5 @@ module.exports = {
   rules: {
     'no-restricted-syntax': 'off', // TODO: respect this rule
     'no-await-in-loop': 'off', // TODO: respect this rule
-    'object-curly-newline': 'off',
   },
 };
