@@ -13,3 +13,6 @@ node_modules/
 
 # Favorite live artists file
 artists.json
+
+# Jest coverage directory
+coverage

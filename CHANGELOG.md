@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add jest test framework.
 - Add babel transcompiler.
 - Add husky and commitlint.
 - Add winston logger.
