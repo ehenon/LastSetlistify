@@ -4,7 +4,7 @@
   "description": "Small Node.js program that automatically creates Spotify playlists from the latest setlists of your favourite live bands!",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "babel-node src/index.js",
     "lint": "eslint ."
   },
   "author": "Emilien Henon <emilienhenon@gmail.com>",
@@ -20,6 +20,10 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@babel/cli": "^7.12.8",
+    "@babel/core": "^7.12.9",
+    "@babel/node": "^7.12.6",
+    "@babel/preset-env": "^7.12.7",
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
     "eslint": "^7.10.0",

@@ -1,34 +1,17 @@
-const setlistfm = require('setlistfm-js');
-const SpotifyWebApi = require('spotify-web-api-node');
-const open = require('open');
-const http = require('http');
-const url = require('url');
-const artists = require('../artists.json');
-const logger = require('./services/logger');
-const config = require('./config');
+import setlistfm from 'setlistfm-js';
+import SpotifyWebApi from 'spotify-web-api-node';
+import open from 'open';
+import http from 'http';
+import url from 'url';
+import artists from '../artists.json';
+import logger from './services/logger';
+import config, { getMissingConfigVariables } from './config';
 
-if (!config.setlistFmApiKey) {
-  logger.error('Setlist.fm API key is missing in the environment variables');
-  process.exit();
-}
+const missingConfigVariables = getMissingConfigVariables(config);
 
-if (!config.spotifyClientId) {
-  logger.error('Spotify Client Id is missing in the environment variables');
-  process.exit();
-}
-
-if (!config.spotifyClientSecret) {
-  logger.error('Spotify Client Secret is missing in the environment variables');
-  process.exit();
-}
-
-if (!config.spotifyCallbackUri) {
-  logger.error('Spotify Callback Uri is missing in the environment variables');
-  process.exit();
-}
-
-if (!config.spotifyUserId) {
-  logger.error('Spotify User Id is missing in the environment variables');
+if (missingConfigVariables) {
+  const errorMessage = missingConfigVariables.reduce((acc, cur) => `${acc}- ${cur}\n`, 'The following config variables are missing:\n');
+  logger.error(errorMessage);
   process.exit();
 }
 

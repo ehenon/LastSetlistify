@@ -9,8 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add babel transcompiler.
 - Add husky and commitlint.
 - Add winston logger.
+
+### Changed
+
+- Configuration management.
 
 ## [v1.0.0]
 
