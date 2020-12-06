@@ -15,5 +15,6 @@ module.exports = {
     'no-restricted-syntax': 'off', // TODO: respect this rule
     'no-await-in-loop': 'off', // TODO: respect this rule
     'no-underscore-dangle': 'off', // Disabled for tests using babel-plugin-rewire
+    'import/named': 'off',
   },
 };
