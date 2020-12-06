@@ -1,4 +1,4 @@
-import setlistfm from 'setlistfm-js';
+import Setlistfm from 'setlistfm-js';
 import SpotifyWebApi from 'spotify-web-api-node';
 import open from 'open';
 import http from 'http';
@@ -30,8 +30,7 @@ try {
 
 let setlistfmClient;
 try {
-  // eslint-disable-next-line new-cap
-  setlistfmClient = new setlistfm({
+  setlistfmClient = new Setlistfm({
     key: config.setlistFmApiKey,
     format: 'json',
     language: 'en',
@@ -131,5 +130,5 @@ const scopes = [
 // Create the authorization URL
 const authorizeURL = spotifyApi.createAuthorizeURL(scopes, 'state');
 
-// Open the authorisation URL in the default browser
+// Open the authorization URL in the default browser
 open(authorizeURL);
