@@ -1,4 +1,3 @@
-require('dotenv').config();
 const setlistfm = require('setlistfm-js');
 const SpotifyWebApi = require('spotify-web-api-node');
 const open = require('open');
@@ -6,28 +5,29 @@ const http = require('http');
 const url = require('url');
 const artists = require('../artists.json');
 const logger = require('./services/logger');
+const config = require('./config');
 
-if (!process.env.SETLISTFM_API_KEY) {
+if (!config.setlistFmApiKey) {
   logger.error('Setlist.fm API key is missing in the environment variables');
   process.exit();
 }
 
-if (!process.env.SPOTIFY_CLIENT_ID) {
+if (!config.spotifyClientId) {
   logger.error('Spotify Client Id is missing in the environment variables');
   process.exit();
 }
 
-if (!process.env.SPOTIFY_CLIENT_SECRET) {
+if (!config.spotifyClientSecret) {
   logger.error('Spotify Client Secret is missing in the environment variables');
   process.exit();
 }
 
-if (!process.env.SPOTIFY_CALLBACK_URI) {
+if (!config.spotifyCallbackUri) {
   logger.error('Spotify Callback Uri is missing in the environment variables');
   process.exit();
 }
 
-if (!process.env.SPOTIFY_USER_ID) {
+if (!config.spotifyUserId) {
   logger.error('Spotify User Id is missing in the environment variables');
   process.exit();
 }
@@ -35,9 +35,9 @@ if (!process.env.SPOTIFY_USER_ID) {
 let spotifyApi;
 try {
   spotifyApi = new SpotifyWebApi({
-    clientId: process.env.SPOTIFY_CLIENT_ID,
-    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    redirectUri: process.env.SPOTIFY_CALLBACK_URI,
+    clientId: config.spotifyClientId,
+    clientSecret: config.spotifyClientSecret,
+    redirectUri: config.spotifyCallbackUri,
   });
 } catch (e) {
   logger.error('An error occurred while connecting to the Spotify API: ', e);
@@ -48,7 +48,7 @@ let setlistfmClient;
 try {
   // eslint-disable-next-line new-cap
   setlistfmClient = new setlistfm({
-    key: process.env.SETLISTFM_API_KEY,
+    key: config.setlistFmApiKey,
     format: 'json',
     language: 'en',
   });
@@ -74,7 +74,7 @@ const generatePlaylists = async (code) => {
       sets.forEach((set) => { songs.push(...set.song); });
 
       const searchPlaylists = await spotifyApi.getUserPlaylists(
-        process.env.SPOTIFY_USER_ID,
+        config.spotifyUserId,
         { limit: 50 },
       );
       const existingPlaylists = searchPlaylists.body.items;
@@ -108,7 +108,7 @@ const generatePlaylists = async (code) => {
           const playlistName = `${artist.name} live ${lastEventDate}`;
           logger.info(`- Creating '${playlistName}' playlist...`);
           const createdPlaylist = await spotifyApi.createPlaylist(
-            process.env.SPOTIFY_USER_ID, playlistName,
+            config.spotifyUserId, playlistName,
             { public: false },
           );
           await spotifyApi.addTracksToPlaylist(createdPlaylist.body.id, songsUri);
