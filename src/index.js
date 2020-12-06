@@ -5,11 +5,12 @@ import http from 'http';
 import url from 'url';
 import artists from '../artists.json';
 import logger from './services/logger';
+import sleep from './services/sleep';
 import config, { getMissingConfigVariables } from './config';
 
 const missingConfigVariables = getMissingConfigVariables(config);
 
-if (missingConfigVariables) {
+if (missingConfigVariables.length > 0) {
   const errorMessage = missingConfigVariables.reduce((acc, cur) => `${acc}- ${cur}\n`, 'The following config variables are missing:\n');
   logger.error(errorMessage);
   process.exit();
@@ -39,8 +40,6 @@ try {
   logger.error(`An error occurred while connecting to the Setlist.fm API: ${e.message}`);
   process.exit();
 }
-
-const sleep = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const generatePlaylists = async (code) => {
   try {
