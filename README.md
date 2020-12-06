@@ -75,7 +75,7 @@ npm run start
 
 These commands allow you to compile the program in a `dist` folder using the [Babel](https://babeljs.io/) transcompiler, and then run the compiled program.
 
-## Some rules to know about the program:
+### Some rules to know about the program:
 - If no `artists.json` file is found, the program stops immediately.
 - If an environment variable is missing, the program stops immediately.
 - If a new setlist is found but contains less than 10 songs, the program does not create a new playlist.
