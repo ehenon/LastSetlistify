@@ -59,15 +59,23 @@ This JSON simply consists of an array containing one object per artist:
 
 ## Usage 🚀
 
-To launch the application, open a terminal from the root of the directory and run the following command:
+To launch the application locally, open a terminal from the root of the directory and run the following command:
 
 ```bash
-npm run start
+npm run dev
 ```
 
 Your web browser will open and ask you to login to your Spotify account if you haven't already done so. The callback url will then be called, triggering the rest of the program. You can follow the progress of the program thanks to the logs appearing in the console.
 
-### Some rules to know about the program:
+If you want to build the program and run the compiled code separately, please note that the following commands are also available:
+```bash
+npm run build
+npm run start
+```
+
+These commands allow you to compile the program in a `dist` folder using the [Babel](https://babeljs.io/) transcompiler, and then run the compiled program.
+
+## Some rules to know about the program:
 - If no `artists.json` file is found, the program stops immediately.
 - If an environment variable is missing, the program stops immediately.
 - If a new setlist is found but contains less than 10 songs, the program does not create a new playlist.
@@ -93,3 +101,8 @@ This project is a free and open personal project. Pull requests are welcome (tar
 - [spotify-web-api-node](https://www.npmjs.com/package/spotify-web-api-node) - Used to communicate with the [Spotify API](https://developer.spotify.com/documentation/web-api/)
 - [open](https://www.npmjs.com/package/open) - Used to open the browser and enable user authentication
 - [dotenv](https://www.npmjs.com/package/dotenv) - Used to load environment variables from `.env` file into `process.env`
+- [babel](https://babeljs.io/) - Used to compile next-gen JavaScript
+- [eslint](https://www.npmjs.com/package/eslint) - Used to find and fix problems in JavaScript code
+- [jest](https://www.npmjs.com/package/jest) - Used to manage unit tests
+- [winston](https://www.npmjs.com/package/winston) - Used to manage console logs
+- [husky](https://www.npmjs.com/package/husky) - Used to prevent bad commits 🐶

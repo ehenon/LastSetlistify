@@ -16,7 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Configuration management.
+- Update scripts in package.json.
+- Refactor configuration management.
 
 ## [v1.0.0]
 

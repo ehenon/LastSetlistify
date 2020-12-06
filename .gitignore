@@ -16,3 +16,6 @@ artists.json
 
 # Jest coverage directory
 coverage
+
+# Build directory
+dist
