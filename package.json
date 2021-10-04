@@ -1,6 +1,6 @@
 {
   "name": "lastsetlistify",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Small Node.js program that automatically creates Spotify playlists from the latest setlists of your favourite live bands!",
   "main": "src/index.js",
   "scripts": {
