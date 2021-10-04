@@ -49,10 +49,18 @@ const generatePlaylists = async (code) => {
     for (const artist of artists) {
       logger.info(`Starting process for ${artist.name}`);
       const setlists = await setlistfmClient.getArtistSetlists(artist.mbid, { p: 1 });
-      const lastEventDate = setlists.setlist[0].eventDate;
-      const sets = setlists.setlist[0].sets.set;
-      const songs = [];
-      sets.forEach((set) => { songs.push(...set.song); });
+      let lastEventDate;
+      let sets;
+      let songs = [];
+      let counter = 0;
+
+      while (!(songs.length > 9) && counter < setlists.setlist.length) {
+        songs = [];
+        lastEventDate = setlists.setlist[counter].eventDate;
+        sets = setlists.setlist[counter].sets.set;
+        sets.forEach((set) => { songs.push(...set.song); });
+        counter += 1;
+      }
 
       const searchPlaylists = await spotifyApi.getUserPlaylists(
         config.spotifyUserId,
