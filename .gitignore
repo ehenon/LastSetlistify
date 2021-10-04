@@ -19,3 +19,6 @@ coverage
 
 # Build directory
 dist
+
+# VSCode settings file
+.vscode/
