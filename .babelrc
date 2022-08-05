@@ -1,6 +1,5 @@
 {
   "plugins": [
-    "rewire",
     "@babel/plugin-transform-runtime"
   ],
   "presets": [
