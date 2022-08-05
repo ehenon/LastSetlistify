@@ -1,6 +1,6 @@
 import Setlistfm from 'setlistfm-js';
 import SpotifyWebApi from 'spotify-web-api-node';
-import open from 'open';
+import puppeteer from 'puppeteer';
 import http from 'http';
 import url from 'url';
 import artists from '../artists.json';
@@ -13,7 +13,7 @@ const missingConfigVariables = getMissingConfigVariables(config);
 if (missingConfigVariables.length > 0) {
   const errorMessage = missingConfigVariables.reduce((acc, cur) => `${acc}- ${cur}\n`, 'The following config variables are missing:\n');
   logger.error(errorMessage);
-  process.exit();
+  process.exit(1);
 }
 
 let spotifyApi;
@@ -23,9 +23,9 @@ try {
     clientSecret: config.spotifyClientSecret,
     redirectUri: config.spotifyCallbackUri,
   });
-} catch (e) {
-  logger.error('An error occurred while connecting to the Spotify API: ', e);
-  process.exit();
+} catch (err) {
+  logger.error(`An error occurred while connecting to the Spotify API: ${err.message}`);
+  process.exit(1);
 }
 
 let setlistfmClient;
@@ -35,9 +35,9 @@ try {
     format: 'json',
     language: 'en',
   });
-} catch (e) {
-  logger.error(`An error occurred while connecting to the Setlist.fm API: ${e.message}`);
-  process.exit();
+} catch (err) {
+  logger.error(`An error occurred while connecting to the Setlist.fm API: ${err.message}`);
+  process.exit(1);
 }
 
 const generatePlaylists = async (code) => {
@@ -97,9 +97,10 @@ const generatePlaylists = async (code) => {
           const playlistName = `${artist.name} live ${lastEventDate}`;
           logger.info(`- Creating '${playlistName}' playlist...`);
           const createdPlaylist = await spotifyApi.createPlaylist(
-            config.spotifyUserId, playlistName,
+            playlistName,
             { public: false },
           );
+          await sleep(500);
           await spotifyApi.addTracksToPlaylist(createdPlaylist.body.id, songsUri);
         }
       } else {
@@ -117,9 +118,9 @@ http.createServer(async (request, response) => {
   const urlParse = url.parse(request.url, true);
   if (urlParse.pathname && urlParse.pathname === '/callback') {
     response.writeHead(200, { 'Content-Type': 'text/html' });
-    response.end('The local server has retrieved the authentication code and continues executing the script... You can close this tab! ;-)');
+    response.end('The local server has retrieved the authentication code and continues executing the script...');
     await generatePlaylists(urlParse.query.code);
-    process.exit();
+    process.exit(0);
   } else {
     response.writeHead(204);
     response.end();
@@ -138,5 +139,20 @@ const scopes = [
 // Create the authorization URL
 const authorizeURL = spotifyApi.createAuthorizeURL(scopes, 'state');
 
-// Open the authorization URL in the default browser
-open(authorizeURL);
+(async () => {
+  // Open the authorization URL in a hidden browser
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
+  await page.goto(authorizeURL);
+
+  // Log in programmatically
+  await page.type('#login-username', config.userLogin);
+  await page.type('#login-password', config.userPassword);
+  const rememberLoginCheckbox = await page.$('#login-remember');
+  await rememberLoginCheckbox.evaluate((c) => c.click());
+  await page.click('#login-button');
+
+  // Wait for navigation and close the browser
+  await page.waitForNavigation();
+  await browser.close();
+})();

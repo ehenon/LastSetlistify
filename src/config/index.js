@@ -16,6 +16,8 @@ export const getMissingConfigVariables = (config) => {
 };
 
 export default {
+  userLogin: process.env.USER_LOGIN,
+  userPassword: process.env.USER_PASSWORD,
   setlistFmApiKey: process.env.SETLISTFM_API_KEY,
   spotifyClientId: process.env.SPOTIFY_CLIENT_ID,
   spotifyClientSecret: process.env.SPOTIFY_CLIENT_SECRET,
