@@ -1,6 +1,6 @@
 # LastSetlistify 🎶
 
-LastSetlistify is a small Node.js program that automatically creates Spotify playlists from the latest setlists of your favourite live bands!
+LastSetlistify is a small Node.js program that automatically creates/updates Spotify playlists from the latest setlists of your favourite live bands!
 
 ![Scheme](resources/scheme.png)
 
@@ -8,7 +8,7 @@ The idea behind this program is to keep your Spotify playlists varied, changing,
 
 ## Prerequisites 📋
 
-The only prerequisite to use this program is to have Node.js on your machine. If you don't have it yet, you can download and install it through the [official website](https://nodejs.org/). LastSetlistify has been tested and works with Node.js 12.16.1 LTS version.
+The only prerequisite to use this program is to have Node.js on your machine. If you don't have it yet, you can download and install it through the [official website](https://nodejs.org/). LastSetlistify has been tested and works with Node.js 16.16.0 latest LTS version.
 
 ## Installation 🔧
 
@@ -24,18 +24,20 @@ npm install
 ```
 Create an app for LastSetlistify in your [Spotify for Developers dashboard](https://developer.spotify.com/dashboard/applications) and retrieve its "Client Id" and "Client Secret" by clicking on it. On the same page, click on "Edit settings" to add an accepted and valid redirect URI: `http://localhost:8888/callback`. This url will be used as a callback at the time of user authentication and is already predefined in the environment variables.
 
-Create a `.env` file with your values based on `.env.sample`:
+Create a `.env` file based on `.env.sample`, and fill it with your own values:
 ```bash
 cp .env.sample .env
 ```
 Some details about the environment variables:
 | # | Variable name         | Required | Description |
 |---|-----------------------|----------|-------------|
-| 1 | SETLISTFM_API_KEY     | *        | Setlist.fm API Key you can generate [here](https://www.setlist.fm/settings/api) (link for logged in users only) |
-| 2 | SPOTIFY_CLIENT_ID     | *        | App Client Id you retrieved just before |
-| 3 | SPOTIFY_CLIENT_SECRET | *        | App Client Secret you retrieved just before |
-| 4 | SPOTIFY_CALLBACK_URI  | *        | Callback URI for authentication, predefined to `http://localhost:8888/callback` |
-| 5 | SPOTIFY_USER_ID       | *        | Spotify username you can find on your [Spotify Account page](https://www.spotify.com/fr/account/overview/) |
+| 1 | USER_LOGIN            | *        | Your Spotify account user login |
+| 2 | USER_PASSWORD         | *        | Your Spotify account user password |
+| 3 | SETLISTFM_API_KEY     | *        | Setlist.fm API Key you can generate [here](https://www.setlist.fm/settings/api) (link for logged in users only) |
+| 4 | SPOTIFY_CLIENT_ID     | *        | App Client Id you retrieved just before |
+| 5 | SPOTIFY_CLIENT_SECRET | *        | App Client Secret you retrieved just before |
+| 6 | SPOTIFY_CALLBACK_URI  | *        | Callback URI for authentication, predefined to `http://localhost:8888/callback` |
+| 7 | SPOTIFY_USER_ID       | *        | Spotify username you can find on your [Spotify Account page](https://www.spotify.com/fr/account/overview/) |
 
 Create an `artists.json` file with your favourite live artists based on `artists.sample.json`:
 ```bash
@@ -57,6 +59,8 @@ This JSON simply consists of an array containing one object per artist:
 ]
 ```
 
+NB: `mbid` fields correspond to the unique identifiers of the artists in the [MusicBrainz](https://musicbrainz.org/) database. You can for example find them in the URL of the artist pages.
+
 ## Usage 🚀
 
 To launch the application locally, open a terminal from the root of the directory and run the following command:
@@ -65,7 +69,7 @@ To launch the application locally, open a terminal from the root of the director
 npm run dev
 ```
 
-Your web browser will open and ask you to login to your Spotify account if you haven't already done so. The callback url will then be called, triggering the rest of the program. You can follow the progress of the program thanks to the logs appearing in the console.
+You can follow the progress of the program thanks to the logs appearing in the console.
 
 If you want to build the program and run the compiled code separately, please note that the following commands are also available:
 ```bash
@@ -86,7 +90,7 @@ These commands allow you to compile the program in a `dist` folder using the [Ba
 ## Alternatives 👀
 As explained above, this project allows you to automatically generate Spotify playlists from the latest setlists of your favourite artists. That being said, this is a Node.js script only, and not a real web or mobile application. So it's intended for a more development-oriented audience (to adapt it, or to run it automatically every week, with a time-based job scheduler for example).
 
-The interest of this project lies essentially in the **automation** of playlist creation. Apart from the authentication part, the user has nothing to do. All his favourite live artists are browsed and processed by the program without any action on his side.
+The interest of this project lies essentially in the **automation** of playlist creation. The user has nothing to do, all his favourite live artists are browsed and processed by the program without any action on his side.
 
 If you want to create Spotify playlists from setlists **manually**, web and mobile applications already exist and are much more suitable for a non-developer audience:
 - [Setify](https://setify.co/) web app
@@ -94,15 +98,14 @@ If you want to create Spotify playlists from setlists **manually**, web and mobi
 - and more..!
 
 ## Contributing ✒️
-This project is a free and open personal project. Pull requests are welcome (targeting the `develop` branch, since we use the Git flow branching pattern). For major changes and problems encountered, feel free to open an issue to discuss what you would like to change/fix. Concerning the commits standards, please follow the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) with these possible types: `feat:`, `fix:`, `build:`, `chore:`, `ci:`, `docs:`, `style:`, `refactor:`, `perf:`, `test:`.
+This project is a free and open personal project. Pull requests are welcome (targeting the `develop` branch). For major changes and problems encountered, feel free to open an issue to discuss what you would like to change/fix. Concerning the commits standards, please follow the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) with these possible types: `feat:`, `fix:`, `build:`, `chore:`, `ci:`, `docs:`, `style:`, `refactor:`, `perf:`, `test:`.
 
 ## Built With 🔨
 - [setlistfm-js](https://www.npmjs.com/package/setlistfm-js) - Used to communicate with the [Setlist.fm API](https://api.setlist.fm/docs/1.0/index.html)
 - [spotify-web-api-node](https://www.npmjs.com/package/spotify-web-api-node) - Used to communicate with the [Spotify API](https://developer.spotify.com/documentation/web-api/)
-- [open](https://www.npmjs.com/package/open) - Used to open the browser and enable user authentication
+- [puppeteer](https://www.npmjs.com/package/puppeteer) - Used to programmatically log the user in a hidden browser
 - [dotenv](https://www.npmjs.com/package/dotenv) - Used to load environment variables from `.env` file into `process.env`
 - [babel](https://babeljs.io/) - Used to compile next-gen JavaScript
 - [eslint](https://www.npmjs.com/package/eslint) - Used to find and fix problems in JavaScript code
-- [jest](https://www.npmjs.com/package/jest) - Used to manage unit tests
 - [winston](https://www.npmjs.com/package/winston) - Used to manage console logs
 - [husky](https://www.npmjs.com/package/husky) - Used to prevent bad commits 🐶
