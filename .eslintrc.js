@@ -3,7 +3,6 @@ module.exports = {
     commonjs: true,
     es2020: true,
     node: true,
-    jest: true,
   },
   extends: [
     'airbnb-base',
@@ -12,10 +11,9 @@ module.exports = {
     ecmaVersion: 11,
   },
   rules: {
-    'no-restricted-syntax': 'off', // TODO: respect this rule
-    'no-await-in-loop': 'off', // TODO: respect this rule
-    'no-loop-func': 'off', // TODO: respect this rule
-    'no-underscore-dangle': 'off', // Disabled for tests using babel-plugin-rewire
-    'import/named': 'off', // Disabled for tests using babel-plugin-rewire
+    'linebreak-style': 'off',
+    'no-restricted-syntax': 'off',
+    'no-await-in-loop': 'off',
+    'no-loop-func': 'off',
   },
 };
